@@ -8,7 +8,9 @@ const config: CodegenConfig = {
       preset: 'client',
       plugins: [],
       presetConfig: {
+        folder: 'types',
         gqlTagName: 'gql',
+        baseTypesPath: './src/__generated__/graphql-types'
       }
     }
   },
