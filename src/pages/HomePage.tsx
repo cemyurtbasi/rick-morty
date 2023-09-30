@@ -1,7 +1,7 @@
 // import CharacterList from '../components/CharacterList';
 import './HomePage.css';
 
-import { FilterCharacter } from '../__generated__/graphql';
+import { Character, FilterCharacter } from '../__generated__/graphql';
 import { useCallback, useRef, useState } from 'react';
 import { useGetAllCharacters } from '../modules/hooks/useGetAllCharacters';
 import FilterCharacterList from '../components/FilterCharacterList';
@@ -14,15 +14,11 @@ export default function HomePage() {
   const {
     items: characters,
     loading,
-    pageCount,
-    error,
     hasMore,
   } = useGetAllCharacters({
     pageNumber,
     filter,
   });
-
-  console.log({ characters, loading, pageCount, error, hasMore });
 
   // Infinite Scroll
   const observer = useRef(null);
@@ -34,29 +30,45 @@ export default function HomePage() {
       }
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          setPageNumber(pageNumber + 1);
+          setPageNumber((prev) => prev + 1);
         }
       });
       if (node) {
         observer.current.observe(node);
       }
     },
-    [loading, hasMore, pageNumber]
+    [loading, hasMore]
   );
+
+  const filteredCharacters =
+    //Filter to show by filter (keep all data in store)
+    characters
+      ?.filter((character: Character) => {
+        return Object.keys(filter).every((key) => {
+          const filterKeyValue = filter[key as keyof typeof filter];
+          const characterKeyValue = character[
+            key as keyof typeof character
+          ] as string;
+          return characterKeyValue.includes(filterKeyValue);
+        });
+      })
+      //Filter by id any duplicate
+      .filter((v, i, a) => a.findIndex((v2) => v2.id === v.id) === i);
 
   return (
     <div className='homePage'>
-      <div className='homePage_filter'>
-        <FilterCharacterList />
-      </div>
+      <FilterCharacterList
+        setFilter={setFilter}
+        setPageNumber={setPageNumber}
+      />
       <div className='homePage_list'>
-        {characters &&
-          characters.map((character, index) => {
+        {filteredCharacters &&
+          filteredCharacters.map((character, index) => {
             return (
               <article
                 key={character.id}
                 ref={
-                  characters.length === index + 1
+                  filteredCharacters.length === index + 1
                     ? lastItemElementRef
                     : undefined
                 }

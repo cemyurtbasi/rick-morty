@@ -1,10 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import {
-  Character,
-  Characters,
-  FilterCharacter,
-} from '../../__generated__/graphql';
+import { Character, FilterCharacter } from '../../__generated__/graphql';
 import { getAllCharacters } from '../api/getAllCharacters';
 
 interface GetAllCharactersProps {
@@ -17,8 +13,8 @@ export function useGetAllCharacters({
   filter,
 }: GetAllCharactersProps) {
   const [hasMore, setHasMore] = useState<boolean>(false);
-  const [pageCount, setPageCount] = useState<number>(undefined);
   const [items, setItems] = useState<Character[]>([]);
+  const first = useRef(filter);
 
   const { data, loading, error } = getAllCharacters({
     page: pageNumber,
@@ -27,13 +23,16 @@ export function useGetAllCharacters({
 
   useEffect(() => {
     if (data && data.info) {
-      setPageCount(data.info.pages);
       setHasMore(!!data.info.next);
       setItems((prevItems) => {
+        if (first.current !== filter) {
+          first.current = filter;
+          return data.results;
+        }
         return [...new Set([...prevItems, ...data.results])];
       });
     }
   }, [data, pageNumber, filter]);
 
-  return { loading, error, hasMore, pageCount, items };
+  return { loading, error, hasMore, items };
 }
