@@ -6,6 +6,8 @@ import { useCallback, useRef, useState } from 'react';
 import { useGetAllCharacters } from '../modules/hooks/useGetAllCharacters';
 import FilterCharacterList from '../components/FilterCharacterList';
 import CharacterCard from '../components/CharacterCard';
+import { Grid, Skeleton } from '@mui/material';
+import { LoadingSpinner } from '../components/CustomLoading';
 
 export default function HomePage() {
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -57,27 +59,39 @@ export default function HomePage() {
 
   return (
     <div className='homePage'>
+      {loading ? <LoadingSpinner /> : null}
       <FilterCharacterList
         setFilter={setFilter}
         setPageNumber={setPageNumber}
       />
-      <div className='homePage_list'>
-        {filteredCharacters &&
-          filteredCharacters.map((character, index) => {
-            return (
-              <article
-                key={character.id}
-                ref={
-                  filteredCharacters.length === index + 1
-                    ? lastItemElementRef
-                    : undefined
-                }
-              >
-                <CharacterCard character={character} />
-              </article>
-            );
-          })}
-      </div>
+      <Grid container alignItems='stretch' columnSpacing={6} rowSpacing={4}>
+        {loading && filteredCharacters?.length === 0
+          ? [...Array(10)].map((_, i) => (
+              <Grid key={i} item xs={12} sm={10} md={8} lg={6}>
+                <Skeleton variant='rectangular' width={'100%'} height={168} />
+              </Grid>
+            ))
+          : null}
+        {filteredCharacters?.map((character, index) => {
+          return (
+            <Grid
+              key={character.id}
+              item
+              ref={
+                filteredCharacters.length === index + 1
+                  ? lastItemElementRef
+                  : undefined
+              }
+              xs={12}
+              sm={10}
+              md={8}
+              lg={6}
+            >
+              <CharacterCard character={character} />
+            </Grid>
+          );
+        })}
+      </Grid>
     </div>
   );
 }

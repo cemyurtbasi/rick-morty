@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import HomePage from './HomePage';
 
-test('renders app', () => {
-  render(<App />);
+test('renders CharacterList', () => {
+  render(<HomePage />);
   const filterElement = screen.getByText(/Rick/i);
   expect(filterElement).not.toBeNull();
 });

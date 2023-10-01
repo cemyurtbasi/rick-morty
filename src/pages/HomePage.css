@@ -6,43 +6,45 @@
   align-items: center;
   justify-content: center;
   font-size: 1rem;
-  padding-top: 100px;
-}
-
-.filterCharacters {
-  position: absolute;
-  top: 60px;
-  left: 10vw;
-}
-
-.homePage_list {
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  padding: 5vw 10% 20px 10%;
   position: relative;
 }
 
-.homePage_list > article {
-  max-width: 530px;
-  margin: 10px;
-  display: inline-table;
+.loadingSpinner {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgb(129, 204, 204);
+  background: radial-gradient(
+    circle,
+    rgba(129, 204, 204, 0.1) 0%,
+    rgba(170, 175, 217, 0.2) 15%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  padding: 10px 0;
+}
+
+.filterCharacters {
+  width: 100%;
+  margin-bottom: 2vw;
 }
 
 .characterCard {
   background-color: white;
   display: flex;
   box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
   height: 168px;
-  width: 530px;
-  margin-bottom: 30px;
 }
 
 .characterCard_img > img {
   width: 168px;
   height: 168px;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
 }
 
 .characterCard_info {

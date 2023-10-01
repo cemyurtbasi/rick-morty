@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { Character } from '../__generated__/graphql';
+import { Card } from '@mui/material';
 
 interface CharacterCardProps {
   character: Character;
@@ -14,7 +15,7 @@ export default memo(function CharacterCard({
   },
 }: CharacterCardProps) {
   return (
-    <div className='characterCard'>
+    <Card className='characterCard'>
       <div className='characterCard_img'>
         <img src={image} alt={name} />
       </div>
@@ -23,14 +24,12 @@ export default memo(function CharacterCard({
           <b>#id: </b> {id}
         </span>
         <span>
-          <b>Name: </b>
-          {name}
+          <b>Name: </b> {name}
         </span>
         <span>
-          <b>Location: </b>
-          {locationName}
+          <b>Location: </b> {locationName}
         </span>
       </div>
-    </div>
+    </Card>
   );
 });
